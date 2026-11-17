@@ -1,0 +1,154 @@
+﻿@model Hepldesk.Models.PublicTiketViewModel
+
+@{
+    ViewData["Title"] = "Buat Pengaduan";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="mb-4">
+                <a asp-controller="Public"
+                   asp-action="Index"
+                   class="text-decoration-none">
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Kembali ke Beranda
+                </a>
+
+                <h1 class="h2 fw-bold mt-3">Buat Pengaduan</h1>
+
+                <p class="text-secondary">
+                    Jelaskan kendala yang kamu alami agar petugas dapat
+                    membantu menanganinya.
+                </p>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <form asp-controller="Public"
+                          asp-action="Create"
+                          method="post"
+                          enctype="multipart/form-data">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger"
+                             role="alert"></div>
+
+                        <div class="mb-4">
+                            <label asp-for="Judul" class="form-label fw-semibold"></label>
+                            <input asp-for="Judul"
+                                   class="form-control"
+                                   maxlength="100"
+                                   placeholder="Contoh: Aplikasi tidak dapat diakses" />
+                            <span asp-validation-for="Judul"
+                                  class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Keterangan"
+                                   class="form-label fw-semibold"></label>
+                            <textarea asp-for="Keterangan"
+                                      class="form-control"
+                                      rows="5"
+                                      maxlength="2000"
+                                      placeholder="Jelaskan kendala yang kamu alami..."></textarea>
+                            <span asp-validation-for="Keterangan"
+                                  class="text-danger small"></span>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <h2 class="h5 fw-bold mb-3">Informasi Pelapor</h2>
+
+                        <p class="text-secondary small">
+                            Informasi berikut bersifat opsional.
+                        </p>
+
+                        <div class="mb-3">
+                            <label asp-for="NamaPelapor"
+                                   class="form-label"></label>
+                            <input asp-for="NamaPelapor"
+                                   class="form-control"
+                                   maxlength="150"
+                                   autocomplete="name"
+                                   placeholder="Nama kamu" />
+                            <span asp-validation-for="NamaPelapor"
+                                  class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NomorHpPelapor"
+                                   class="form-label"></label>
+                            <input asp-for="NomorHpPelapor"
+                                   class="form-control"
+                                   maxlength="30"
+                                   type="tel"
+                                   autocomplete="tel"
+                                   placeholder="Contoh: 081234567890" />
+                            <span asp-validation-for="NomorHpPelapor"
+                                  class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="EmailPelapor"
+                                   class="form-label"></label>
+                            <input asp-for="EmailPelapor"
+                                   class="form-control"
+                                   maxlength="254"
+                                   type="email"
+                                   autocomplete="email"
+                                   placeholder="nama@email.com" />
+                            <span asp-validation-for="EmailPelapor"
+                                  class="text-danger small"></span>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="mb-4">
+                            <label asp-for="Screenshot"
+                                   class="form-label fw-semibold"></label>
+                            <input asp-for="Screenshot"
+                                   class="form-control"
+                                   type="file"
+                                   accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+                            <span asp-validation-for="Screenshot"
+                                  class="text-danger small"></span>
+
+                            <div class="form-text">
+                                Format JPG, JPEG, atau PNG. Maksimal 2 MB.
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info small" role="alert">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Setelah pengaduan berhasil dikirim, simpan nomor
+                            tiket dan kode pelacakan rahasia untuk memeriksa
+                            statusnya.
+                        </div>
+
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+                            <button type="submit"
+                                    class="btn btn-primary btn-lg">
+                                <i class="bi bi-send me-2"></i>
+                                Kirim Pengaduan
+                            </button>
+
+                            <a asp-controller="Public"
+                               asp-action="Index"
+                               class="btn btn-outline-secondary btn-lg">
+                                Batal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

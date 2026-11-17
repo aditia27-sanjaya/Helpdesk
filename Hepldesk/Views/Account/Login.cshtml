@@ -1,0 +1,139 @@
+﻿@model Hepldesk.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - Helpdesk</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <style>
+            body {
+                min-height: 100vh;
+                background: #f3f5f9;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .login-card {
+                width: 100%;
+                max-width: 420px;
+                border: none;
+                border-radius: 16px;
+            }
+
+            .login-icon {
+                width: 64px;
+                height: 64px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 16px;
+                background: #e8efff;
+                color: #253783;
+                border-radius: 16px;
+                font-size: 30px;
+            }
+
+            .btn-login {
+                background: #253783;
+                color: white;
+            }
+
+            .btn-login:hover {
+                background: #1c2863;
+                color: white;
+            }
+    </style>
+</head>
+<body>
+    <div class="container px-3">
+        <div class="card login-card shadow-sm mx-auto">
+            <div class="card-body p-4 p-md-5">
+
+                <div class="login-icon">
+                    &#128272;
+                </div>
+
+                <h3 class="text-center fw-bold mb-2">
+                    Helpdesk Login
+                </h3>
+
+                <p class="text-center text-secondary mb-4">
+                    Silakan masuk ke akun Anda
+                </p>
+
+                <form asp-controller="Account"
+                      asp-action="Login"
+                      asp-route-returnUrl="@ViewData["ReturnUrl"]"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger small mb-3">
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Username"
+                               class="form-label">
+                            Username
+                        </label>
+
+                        <input asp-for="Username"
+                               class="form-control"
+                               placeholder="Masukkan username"
+                               autocomplete="username" />
+
+                        <span asp-validation-for="Username"
+                              class="text-danger small">
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password"
+                               class="form-label">
+                            Password
+                        </label>
+
+                        <input asp-for="Password"
+                               class="form-control"
+                               placeholder="Masukkan password"
+                               autocomplete="current-password" />
+
+                        <span asp-validation-for="Password"
+                              class="text-danger small">
+                        </span>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input asp-for="RememberMe"
+                               class="form-check-input" />
+
+                        <label asp-for="RememberMe"
+                               class="form-check-label">
+                            Ingat saya
+                        </label>
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-login btn-lg w-100">
+                        Login
+                    </button>
+                </form>
+
+                <p class="text-center text-secondary small mt-4 mb-0">
+                    Helpdesk &amp; Ticketing System
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

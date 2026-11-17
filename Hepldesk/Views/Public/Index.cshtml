@@ -1,0 +1,105 @@
+﻿@{
+    ViewData["Title"] = "Beranda";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center g-5 py-lg-5">
+            <div class="col-lg-7">
+                <span class="badge rounded-pill text-bg-primary mb-3 px-3 py-2">
+                    <i class="bi bi-headset me-1"></i>
+                    Layanan Bantuan
+                </span>
+
+                <h1 class="display-5 fw-bold mb-4">
+                    Ada kendala atau keluhan?
+                    <span class="text-primary">Kami siap membantu.</span>
+                </h1>
+
+                <p class="lead text-secondary mb-4">
+                    Sampaikan pengaduan kamu melalui layanan Helpdesk.
+                    Pantau perkembangan penanganan tiket dengan mudah
+                    tanpa perlu membuat akun.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3">
+                    <a asp-controller="Public"
+                       asp-action="Create"
+                       class="btn btn-primary btn-lg">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Buat Pengaduan
+                    </a>
+
+                    <a asp-controller="Public"
+                       asp-action="Track"
+                       class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-search me-2"></i>
+                        Cek Status Tiket
+                    </a>
+                </div>
+
+                <p class="small text-secondary mt-3">
+                    <i class="bi bi-shield-check me-1"></i>
+                    Simpan nomor tiket dan kode pelacakan setelah pengaduan
+                    berhasil dibuat.
+                </p>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4 p-lg-5">
+                        <div class="text-center mb-4">
+                            <div class="display-3 text-primary mb-3">
+                                <i class="bi bi-chat-square-text"></i>
+                            </div>
+
+                            <h3 class="h4 fw-bold">Bagaimana cara kerjanya?</h3>
+
+                            <p class="text-secondary mb-0">
+                                Tiga langkah mudah untuk menyampaikan keluhan.
+                            </p>
+                        </div>
+
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="fs-3 text-primary">
+                                <i class="bi bi-1-circle-fill"></i>
+                            </div>
+                            <div>
+                                <h4 class="h6 fw-bold">Kirim pengaduan</h4>
+                                <p class="text-secondary small mb-0">
+                                    Isi judul dan deskripsi kendala yang kamu alami.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="fs-3 text-primary">
+                                <i class="bi bi-2-circle-fill"></i>
+                            </div>
+                            <div>
+                                <h4 class="h6 fw-bold">Simpan informasi tiket</h4>
+                                <p class="text-secondary small mb-0">
+                                    Simpan nomor tiket dan kode rahasia pelacakan.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3">
+                            <div class="fs-3 text-primary">
+                                <i class="bi bi-3-circle-fill"></i>
+                            </div>
+                            <div>
+                                <h4 class="h6 fw-bold">Pantau perkembangan</h4>
+                                <p class="text-secondary small mb-0">
+                                    Gunakan kedua informasi tersebut untuk
+                                    memeriksa status pengaduan.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,27 @@
+﻿# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# NuGet
+*.nupkg
+.nuget/
+
+# Local configuration and secrets
+appsettings.json
+appsettings.Development.json
+secrets.json
+
+# User uploads - do not publish uploaded screenshots
+**/wwwroot/uploads/tiket/*
+!**/wwwroot/uploads/tiket/.gitkeep
+
+# Operating system files
+.DS_Store
+Thumbs.db

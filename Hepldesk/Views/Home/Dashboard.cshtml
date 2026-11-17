@@ -1,0 +1,294 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid py-3">
+
+    <!-- Header Dashboard -->
+    <div class="d-flex flex-wrap justify-content-between
+        align-items-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold mb-1">Dashboard</h2>
+            <p class="text-secondary mb-0">
+                Selamat datang di sistem Helpdesk &amp; Ticketing.
+            </p>
+        </div>
+
+        <a asp-controller="Tickets"
+           asp-action="Index"
+           class="btn btn-primary">
+            <i class="bi bi-ticket-perforated me-1"></i>
+            Lihat Daftar Tiket
+        </a>
+    </div>
+
+    <!-- Statistik Tiket -->
+    <div class="row g-4">
+
+        <!-- Total Tiket -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between
+                        align-items-center mb-3">
+                        <div>
+                            <p class="text-secondary mb-2">
+                                Total Tiket
+                            </p>
+                            <h2 class="fw-bold mb-0">
+                                @(ViewData["TotalTiket"] ?? 0)
+                            </h2>
+                        </div>
+
+                        <div class="rounded-3 bg-primary bg-opacity-10
+                            text-primary p-3">
+                            <i class="bi bi-ticket-perforated-fill fs-2"></i>
+                        </div>
+                    </div>
+                    <small class="text-secondary">
+                        Seluruh tiket terdaftar
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tiket Baru -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between
+                        align-items-center mb-3">
+                        <div>
+                            <p class="text-secondary mb-2">
+                                Tiket Baru
+                            </p>
+                            <h2 class="fw-bold mb-0">
+                                @(ViewData["TiketBaru"] ?? 0)
+                            </h2>
+                        </div>
+
+                        <div class="rounded-3 bg-info bg-opacity-10
+                            text-info p-3">
+                            <i class="bi bi-inbox-fill fs-2"></i>
+                        </div>
+                    </div>
+                    <small class="text-secondary">
+                        Menunggu penanganan
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tiket Diproses -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between
+                        align-items-center mb-3">
+                        <div>
+                            <p class="text-secondary mb-2">
+                                Diproses
+                            </p>
+                            <h2 class="fw-bold mb-0">
+                                @(ViewData["TiketDiproses"] ?? 0)
+                            </h2>
+                        </div>
+
+                        <div class="rounded-3 bg-warning bg-opacity-10
+                            text-warning p-3">
+                            <i class="bi bi-hourglass-split fs-2"></i>
+                        </div>
+                    </div>
+                    <small class="text-secondary">
+                        Sedang ditangani
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tiket Selesai -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between
+                        align-items-center mb-3">
+                        <div>
+                            <p class="text-secondary mb-2">
+                                Tiket Selesai
+                            </p>
+                            <h2 class="fw-bold mb-0">
+                                @(ViewData["TiketSelesai"] ?? 0)
+                            </h2>
+                        </div>
+
+                        <div class="rounded-3 bg-success bg-opacity-10
+                            text-success p-3">
+                            <i class="bi bi-check-circle-fill fs-2"></i>
+                        </div>
+                    </div>
+                    <small class="text-secondary">
+                        Berhasil diselesaikan
+                    </small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Informasi tambahan -->
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded-circle bg-primary bg-opacity-10
+                    text-primary p-3">
+                    <i class="bi bi-clipboard-data fs-3"></i>
+                </div>
+
+                <div>
+                    <h5 class="fw-bold mb-1">
+                        Ringkasan Helpdesk
+                    </h5>
+                    <p class="text-secondary mb-0">
+                        Pantau jumlah dan status tiket melalui
+                        Dashboard ini. Kelola tiket untuk melihat
+                        detail serta melakukan pembaruan.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grafik Dashboard -->
+    <div class="row g-4 mt-1">
+
+        <!-- Donut Chart -->
+        <div class="col-12 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-1">
+                        Distribusi Tiket
+                    </h5>
+                    <p class="text-secondary small mb-3">
+                        Persentase tiket berdasarkan status
+                    </p>
+                    <div style="position: relative; height: 280px;">
+                        <canvas id="chartStatusTiket"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Bar Chart -->
+        <div class="col-12 col-lg-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-1">
+                        Beban Kerja Petugas
+                    </h5>
+                    <p class="text-secondary small mb-3">
+                        Jumlah tiket Baru dan Diproses
+                    </p>
+                    <div style="position: relative; height: 280px;">
+                        <canvas id="chartTiketPetugas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Data Donut Chart
+        const dataStatus = {
+            labels: ['Baru', 'Diproses', 'Selesai'],
+            datasets: [{
+                data: [
+                            @ViewData["TiketBaru"],
+                            @ViewData["TiketDiproses"],
+                    @ViewData["TiketSelesai"]
+                ],
+                backgroundColor: [
+                    '#3B82F6',
+                    '#F59E0B',
+                    '#10B981'
+                ],
+                borderWidth: 0,
+                hoverOffset: 6
+            }]
+        };
+
+        // Donut Chart
+        new Chart(document.getElementById('chartStatusTiket'), {
+            type: 'doughnut',
+            data: dataStatus,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '68%',
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+
+        // Data Horizontal Bar Chart
+        const dataPetugas = {
+            labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                                            ((IEnumerable<dynamic>)ViewBag.DataTiketPetugas)
+                                                    .Select(p => p.NamaPetugas)
+                            )),
+            datasets: [{
+                label: 'Jumlah Tiket Aktif',
+                data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                                                    ((IEnumerable<dynamic>)ViewBag.DataTiketPetugas)
+                                                            .Select(p => p.JumlahTiket)
+                                    )),
+                backgroundColor: '#3B82F6',
+                borderRadius: 6,
+                barThickness: 24
+            }]
+        };
+
+        // Horizontal Bar Chart
+        new Chart(document.getElementById('chartTiketPetugas'), {
+            type: 'bar',
+            data: dataPetugas,
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        },
+                        title: {
+                            display: true,
+                            text: 'Jumlah Tiket'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Nama Petugas'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+}

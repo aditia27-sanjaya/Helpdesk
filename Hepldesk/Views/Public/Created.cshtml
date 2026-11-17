@@ -1,0 +1,128 @@
+﻿@model Hepldesk.Models.PublicTiketCreatedViewModel
+
+@{
+    ViewData["Title"] = "Pengaduan Berhasil";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <div class="display-1 text-success mb-3">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+
+                        <h1 class="h2 fw-bold">Pengaduan Berhasil Dikirim!</h1>
+
+                        <p class="text-secondary">
+                            Pengaduan kamu telah diterima. Simpan informasi
+                            berikut untuk memeriksa perkembangan penanganannya.
+                        </p>
+                    </div>
+
+                    <div class="alert alert-warning" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <strong>Penting:</strong> kode pelacakan hanya
+                        ditampilkan pada konfirmasi ini. Simpan dengan aman
+                        dan jangan bagikan kepada orang lain.
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            Nomor Tiket
+                        </label>
+
+                        <div class="input-group">
+                            <input id="nomorTiket"
+                                   class="form-control fw-bold"
+                                   value="@Model.NomorTiketPublik"
+                                   readonly />
+
+                            <button type="button"
+                                    class="btn btn-outline-primary"
+                                    onclick="salinTeks('nomorTiket')">
+                                <i class="bi bi-copy me-1"></i> Salin
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            Kode Pelacakan Rahasia
+                        </label>
+
+                        <div class="input-group">
+                            <input id="kodePelacakan"
+                                   class="form-control fw-bold"
+                                   value="@Model.KodePelacakan"
+                                   readonly />
+
+                            <button type="button"
+                                    class="btn btn-outline-primary"
+                                    onclick="salinTeks('kodePelacakan')">
+                                <i class="bi bi-copy me-1"></i> Salin
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            Judul Pengaduan
+                        </label>
+
+                        <p class="mb-1">@Model.Judul</p>
+
+                        <small class="text-secondary">
+                            Dikirim pada
+                            @Model.TanggalDibuat.ToString("dd MMMM yyyy HH:mm")
+                        </small>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Public"
+                           asp-action="Track"
+                           class="btn btn-primary btn-lg">
+                            <i class="bi bi-search me-2"></i>
+                            Cek Status Tiket
+                        </a>
+
+                        <a asp-controller="Public"
+                           asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Kembali ke Beranda
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function salinTeks(id) {
+            const input = document.getElementById(id);
+
+            input.select();
+            input.setSelectionRange(0, 99999);
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(input.value)
+                    .then(() => alert("Berhasil disalin."))
+                    .catch(() => alert("Gagal menyalin. Silakan salin secara manual."));
+            } else {
+                try {
+                    const berhasil = document.execCommand("copy");
+                    alert(berhasil
+                        ? "Berhasil disalin."
+                        : "Gagal menyalin. Silakan salin secara manual.");
+                } catch {
+                    alert("Gagal menyalin. Silakan salin secara manual.");
+                }
+            }
+        }
+    </script>
+}

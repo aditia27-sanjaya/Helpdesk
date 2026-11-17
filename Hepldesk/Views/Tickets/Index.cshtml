@@ -1,0 +1,410 @@
+﻿@model List<Hepldesk.Models.Tiket>
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 pt-4 px-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h4 class="mb-1 fw-bold">Daftar Tiket</h4>
+                <p class="text-muted mb-0 small">
+                    Kelola dan pantau semua tiket bantuan.
+                </p>
+            </div>
+            @if (User.IsInRole("Admin"))
+            {
+            <button type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalTambahTiket">
+                <i class="bi bi-plus-lg me-1"></i> Tambah Tiket
+            </button>
+            }
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalTambahTiket" tabindex="-1"
+         aria-labelledby="judulModalTiket" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-controller="Tickets" asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="judulModalTiket">
+                            Tambah Tiket
+                        </h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Tutup">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="Judul" class="form-label">
+                                Judul Tiket
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="Judul"
+                                   name="Judul"
+                                   required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Keterangan" class="form-label">
+                                Keterangan
+                            </label>
+                            <textarea class="form-control"
+                                      id="Keterangan"
+                                      name="Keterangan"
+                                      rows="4"
+                                      placeholder="Kronologi.."
+                                      required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Screenshot" class="form-label">
+                                Screenshot Bukti Masalah (Opsional)
+                            </label>
+                            <input type="file"
+                                   class="form-control"
+                                   id="Screenshot"
+                                   name="Screenshot"
+                                   accept=".jpg,.jpeg,.png" />
+                            <div class="form-text">
+                                Format JPG atau PNG Maksimal 2 MB.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="AssignedToUserId" class="form-label">
+                                Assign To
+                            </label>
+                            <select class="form-select" id="AssignedToUserId" name="AssignedToUserId">
+                                <option value="">Belum Ditugaskan</option>
+                                @foreach (var petugas in ViewBag.Petugas)
+                                {
+                                    <option value="@petugas.Id">
+                                        @petugas.UserName
+                                    </option>
+                                }
+                            </select>
+                            <div class="form-text">
+                                Pilih Petugas yang akan menangani tiket ini.
+                                Penugasan juga dapat dilakukan kemudian.
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Simpan Tiket
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body px-4">
+        <div class="row align-items-end g-3 mb-3">
+            <div class="col-md-4 col-lg-3">
+                <label for="filterStatus" class="form-label fw-semibold">
+                    Filter Status
+                </label>
+                <select id="filterStatus" class="form-select">
+                    <option value="">Semua Status</option>
+                    <option value="Baru">Baru</option>
+                    <option value="Diproses">Diproses</option>
+                    <option value="Selesai">Selesai</option>
+                </select>
+            </div>
+
+            <div class="col-md-8 col-lg-9 text-md-end">
+                <span class="text-muted small">
+                    Total tiket terdaftar: <strong>@Model.Count</strong>
+                </span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="tabelTiket"
+                   class="table table-striped table-hover align-middle w-100">
+                <thead class="table-light">
+                    <tr>
+                        <th>No.</th>
+                        <th>Judul Tiket</th>
+                        <th>Penanggung Jawab</th>
+                        <th>Status</th>
+                        <th style="min-width: 140px;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var tiket in Model)
+                    {
+                        <tr>
+                            <td>@tiket.Id</td>
+                            <td>
+                                <div class="fw-semibold">@tiket.Judul</div>
+                                <div class="text-muted small">
+                                    Tiket #@tiket.Id
+                                </div>
+                            </td>
+                            <td>
+                                @if (tiket.AssignedToUserId.HasValue &&
+                                     ViewBag.NamaPetugas.ContainsKey(tiket.AssignedToUserId.Value))
+                                {
+                                    <span class="badge bg-primary">
+                                        @ViewBag.NamaPetugas[tiket.AssignedToUserId.Value]
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        Belum Ditugaskan
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                @if (tiket.Status == "Baru")
+                                {
+                                    <span class="badge"
+                                          style="font-size: 14px; padding: 8px 12px; min-width: 70px; background-color: #90CAF9; color: #0D47A1;">
+                                        Baru
+                                    </span>
+                                }
+                                else if (tiket.Status == "Diproses")
+                                {
+                                    <span class="badge"
+                                          style="font-size: 14px; padding: 8px 12px; min-width: 70px; background-color: #FFE082; color: #795548;">
+                                        Diproses
+                                    </span>
+                                }
+                                else if (tiket.Status == "Selesai")
+                                {
+                                    <span class="badge"
+                                          style="font-size: 14px; padding: 8px 12px; min-width: 70px; background-color: #90EE90; color: #155724;">
+                                        Selesai
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill text-bg-secondary">
+                                        @tiket.Status
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <button type="button" class="btn btn-warning btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalEditTiket-@tiket.Id">
+                                        Edit
+                                    </button>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <form asp-controller="Tickets"
+                                        asp-action="Delete"
+                                        method="post"
+                                        onsubmit="return konfirmasiHapus(event, this);">
+                                            <input type="hidden"
+                                            name="id"
+                                            value="@tiket.Id" />
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@foreach (var tiket in Model)
+{
+    <div class="modal fade"
+         id="modalEditTiket-@tiket.Id"
+         tabindex="-1"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-controller="Tickets"
+                      asp-action="Edit"
+                      method="post"
+                      enctype="multipart/form-data">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Tiket #@tiket.Id</h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Tutup"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" name="Id" value="@tiket.Id" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Judul Tiket</label>
+                            <input type="text"
+                                   class="form-control"
+                                   name="Judul"
+                                   value="@tiket.Judul"
+                                   required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Keterangan</label>
+                            <textarea class="form-control"
+                                      name="Keterangan"
+                                      rows="4"
+                                      required>@tiket.Keterangan</textarea>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(tiket.ScreenshotPath))
+                        {
+                            <div class="mb-3">
+                                <label class="form-label">Lampiran Gambar</label>
+                                <div>
+                                    <a href="@tiket.ScreenshotPath"
+                                       target="_blank"
+                                       rel="noopener noreferrer">
+                                        <img src="@tiket.ScreenshotPath"
+                                             alt="Screenshot tiket @tiket.Id"
+                                             class="img-thumbnail"
+                                             style="max-width:100%;max-height:250px;" />
+                                    </a>
+                                </div>
+                                <div class="form-text">
+                                    Klik gambar untuk melihat ukuran penuh.
+                                </div>
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <label class="form-label">Ganti Gambar (Opsional)</label>
+                            <input type="file"
+                                   class="form-control"
+                                   name="Screenshot"
+                                   accept=".jpg,.jpeg,.png" />
+                            <div class="form-text">
+                                JPG atau PNG, maksimal 2 MB. Kosongkan jika tidak ingin mengganti.
+                            </div>
+                        </div>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Assign To
+                                </label>
+                                <select class="form-select" name="AssignedToUserId">
+                                    <option value="">Belum Ditugaskan</option>
+                                    @foreach (var petugas in ViewBag.Petugas)
+                                    {
+                                        <option value="@petugas.Id"
+                                                selected="@(petugas.Id == tiket.AssignedToUserId)">
+                                            @petugas.UserName
+                                        </option>
+                                    }
+                                </select>
+                                <div class="form-text">
+                                    Pilih Petugas yang bertanggung jawab menangani tiket ini.
+                                </div>
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" name="Status" required>
+                                <option value="Baru" selected="@(tiket.Status == "Baru")">Baru</option>
+                                <option value="Diproses" selected="@(tiket.Status == "Diproses")">Diproses</option>
+                                <option value="Selesai" selected="@(tiket.Status == "Selesai")">Selesai</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Keterangan Perubahan Status
+                            </label>
+                            <textarea class="form-control" name="KeteranganStatus" rows="3" maxlength="500"
+                                      placeholder="Jelaskan perkembangan penanganan tiket..."></textarea>
+                            <div class="form-text">
+                                Wajib diisi jika status tiket berubah.
+                                Maksimal 500 karakter.
+                                Keterangan ini dapat dilihat oleh pelapor.
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Batal
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabel = new DataTable('#tabelTiket', {
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50],
+            order: [],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/2.3.8/i18n/id.json'
+            }
+        });
+
+        document.getElementById('filterStatus').addEventListener('change', function () {
+            tabel.column(3).search(this.value).draw();
+        });
+    });
+</script>
+
+<script>
+    function konfirmasiHapus(event, form) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: 'Apakah kamu yakin?',
+            text: 'Tiket yang dihapus tidak dapat dikembalikan!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+
+        return false;
+    }
+</script>
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Upload Gagal!',
+                text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(errorMessage)),
+                confirmButtonText: 'Mengerti'
+            });
+        });
+    </script>
+}

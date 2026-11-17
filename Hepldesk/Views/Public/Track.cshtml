@@ -1,0 +1,241 @@
+﻿@model object
+
+@{
+    ViewData["Title"] = "Pelacakan Tiket";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+
+    var hasilPelacakan =
+        Model as PublicTiketTrackResultViewModel;
+
+    var formulir =
+        Model as PublicTiketTrackViewModel;
+}
+
+<section class="py-5">
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                @if (hasilPelacakan == null)
+                {
+                    <!-- FORMULIR PELACAKAN -->
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4 p-lg-5">
+
+                            <div class="text-center mb-4">
+                                <div class="display-3 text-primary mb-3">
+                                    <i class="bi bi-search"></i>
+                                </div>
+
+                                <h1 class="h3 fw-bold">
+                                    Cek Status Tiket
+                                </h1>
+
+                                <p class="text-secondary">
+                                    Masukkan nomor tiket dan kode pelacakan
+                                    untuk melihat perkembangan pengaduan.
+                                </p>
+                            </div>
+
+                            <div asp-validation-summary="ModelOnly"
+                                 class="alert alert-danger"
+                                 role="alert">
+                            </div>
+
+                            <form asp-controller="Public"
+                                  asp-action="Track"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">
+                                        Nomor Tiket
+                                    </label>
+                                    <input name="NomorTiketPublik" value="@formulir?.NomorTiketPublik" class="form-control form-control-lg"
+                                           placeholder="Contoh: HD-20261031-A1B2C3D4" />
+
+                                    <span class="text-danger small">
+                                        @Html.ValidationMessage(
+                                            "NomorTiketPublik")
+                                    </span>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">
+                                        Kode Pelacakan
+                                    </label>
+
+                                    <input name="KodePelacakan" type="password" value="" class="form-control form-control-lg"
+                                           placeholder="Masukkan kode pelacakan" />
+
+                                    <span class="text-danger small">
+                                        @Html.ValidationMessage(
+                                            "KodePelacakan")
+                                    </span>
+
+                                    <div class="form-text">
+                                        Gunakan kode rahasia yang diperoleh
+                                        ketika pengaduan berhasil dibuat.
+                                    </div>
+                                </div>
+
+                                <button type="submit"
+                                        class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-search me-2"></i>
+                                    Lacak Tiket
+                                </button>
+
+                                <div class="text-center mt-3">
+                                    <a asp-controller="Public"
+                                       asp-action="Index"
+                                       class="text-decoration-none">
+                                        <i class="bi bi-arrow-left me-1"></i>
+                                        Kembali ke Beranda
+                                    </a>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <!-- HASIL PELACAKAN -->
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
+                        <div class="card-body p-4">
+
+                            <div class="d-flex justify-content-between
+                                align-items-start flex-wrap gap-3">
+
+                                <div>
+                                    <span class="text-secondary small">
+                                        Nomor Tiket
+                                    </span>
+
+                                    <h2 class="h5 fw-bold text-primary mb-1">
+                                        @hasilPelacakan.NomorTiketPublik
+                                    </h2>
+
+                                    <h3 class="h4 fw-bold mt-3">
+                                        @hasilPelacakan.Judul
+                                    </h3>
+
+                                    <p class="text-secondary mb-0">
+                                        Dibuat pada
+                                        @hasilPelacakan.TanggalDibuat.ToString("dd MMMM yyyy HH:mm")
+                                    </p>
+                                </div>
+
+                                <div class="text-end">
+                                    <span class="badge rounded-pill
+                                        @(hasilPelacakan.Status == "Selesai"
+    ? "text-bg-success"
+    : hasilPelacakan.Status == "Diproses"
+        ? "text-bg-primary"
+        : "text-bg-warning") px-3 py-2">
+                                        @hasilPelacakan.Status
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+
+                            <h3 class="h5 fw-bold mb-4">
+                                <i class="bi bi-clock-history text-primary me-2"></i>
+                                Riwayat Penanganan
+                            </h3>
+
+                            @if (hasilPelacakan.RiwayatStatus.Any())
+                            {
+                                <div class="position-relative ps-4">
+
+                                    @foreach (var riwayat in hasilPelacakan.RiwayatStatus)
+                                    {
+                                        <div class="position-relative pb-4">
+
+                                            <div class="position-absolute
+                                                bg-primary rounded-circle"
+                                                 style="width: 14px;
+                                                height: 14px;
+                                                left: -25px;
+                                                top: 5px;">
+                                            </div>
+
+                                            <div class="border-start position-absolute
+                                                h-100"
+                                                 style="left: -19px;
+                                                top: 15px;">
+                                            </div>
+
+                                            <div class="d-flex flex-wrap
+                                                justify-content-between gap-2">
+
+                                                <span class="badge
+                                                    @(riwayat.Status == "Selesai"
+                                                        ? "text-bg-success"
+                                                        : riwayat.Status == "Diproses"
+                                                            ? "text-bg-warning"
+                                                            : "text-bg-primary")">
+                                                    @riwayat.Status
+                                                </span>
+
+                                                <small class="text-secondary">
+                                                    @riwayat.TanggalPerubahan.ToString("dd MMM yyyy HH:mm")
+                                                </small>
+                                            </div>
+
+                                            @if (!string.IsNullOrWhiteSpace(
+                                                riwayat.Keterangan))
+                                            {
+                                                <p class="mt-2 mb-0 text-secondary">
+                                                    @riwayat.Keterangan
+                                                </p>
+                                            }
+
+                                        </div>
+                                    }
+
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-secondary mb-0">
+                                    Belum ada riwayat penanganan tiket.
+                                </p>
+                            }
+
+                            <hr />
+
+                            <div class="d-flex flex-wrap gap-2">
+                                <a asp-controller="Public"
+                                   asp-action="Track"
+                                   class="btn btn-primary">
+                                    <i class="bi bi-search me-2"></i>
+                                    Lacak Tiket Lain
+                                </a>
+
+                                <a asp-controller="Public"
+                                   asp-action="Index"
+                                   class="btn btn-outline-secondary">
+                                    Kembali ke Beranda
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
