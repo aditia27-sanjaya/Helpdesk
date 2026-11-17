@@ -70,6 +70,31 @@ REST API menggunakan JSON sebagai format pertukaran data serta HTTP status code 
 - ImageSharp
 - Postman
 
+## 📸 Application Screenshots
+
+### 1. Authentication
+![Login](Hepldesk/screenshots/login.png)
+
+### 2. Admin Dashboard & Management
+
+![Dashboard](Hepldesk/screenshots/dashboard.png)
+
+![Ticket Management](Hepldesk/screenshots/ticket.png)
+
+![User Management](Hepldesk/screenshots/user.png)
+
+### 3. Public Complaint
+
+![Public Page](Hepldesk/screenshots/public.png)
+
+![Complaint Form](Hepldesk/screenshots/form-pengaduan.png)
+
+### 4. Ticket Tracking
+
+![Ticket Tracing](Hepldesk/screenshots/tracing.png)
+
+![Ticket Tracking Result](Hepldesk/screenshots/tiket-lacak.png)
+
 ## ⚙️ Persyaratan Sistem
 
 Sebelum menjalankan aplikasi, pastikan perangkat sudah memiliki:
