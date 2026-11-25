@@ -187,8 +187,8 @@ Hepldesk/
 
 **Aditia Sanjaya**
 
-GitHub: [@aditia27-sanjaya](https://github.com/aditia27-sanjaya)
-
+GitHub : [@aditia27-sanjaya](https://github.com/aditia27-sanjaya)
+Email : aditsanjayaa27@gmail.com
 ---
 
 *This project was developed as a learning and portfolio project for ASP.NET Core MVC, database management, authentication, authorization, and REST API development.*
